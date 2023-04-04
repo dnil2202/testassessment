@@ -4,7 +4,7 @@ import { format } from 'date-fns'
 import { BiArrowBack } from 'react-icons/bi';
 
 
-const Modal = ({setOpenModal,id,setIdEdit, onView, setOnView}) => {
+const Modal = ({setOpenModal,id,setIdEdit, onView, setOnView,setFetchStatus}) => {
     const [inputDataEmployee, setInputDataEmployee]=useState({
         name:'',
         address:'',
@@ -55,9 +55,31 @@ const Modal = ({setOpenModal,id,setIdEdit, onView, setOnView}) => {
         const {name ,address,gender,born_date}=inputDataEmployee;
         try {
             if(!id){
-                await api.addEmployee({name,address,gender,born_date});
+                let res = await api.addEmployee({name,address,gender,born_date});
+                if(res){
+                    setInputDataEmployee({
+                        name:'',
+                        address:'',
+                        gender:'',
+                        born_date:''
+                    })
+                    setOpenModal(false)
+                    setFetchStatus(true)
+                }
             }else{
-                await api.editEmployee({name,address,gender,born_date})
+                let res = await api.editEmployee({name,address,gender,born_date,id})
+                if(res){
+                    setInputDataEmployee({
+                        name:'',
+                        address:'',
+                        gender:'',
+                        born_date:''
+                    })
+                    setOpenModal(false)
+                    setFetchStatus(true)
+                    setIdEdit(null)
+                }
+                
             }
         } catch (error) {
             console.log(error)
@@ -66,65 +88,67 @@ const Modal = ({setOpenModal,id,setIdEdit, onView, setOnView}) => {
 
     const printAddModal = ()=>{
         return(
-            <form className='mt-3'>
-            <label className='block mb-3'>
-                <span className='block text-sm'>Nama Pekerja</span>
-                <input 
-                className='border border-slate-200 w-full mt-2' 
-                name='name' 
-                onChange={onChange}
-                value={inputDataEmployee.name}
-                disabled={onView?true:false}
-                required
-                />
-            </label>
-            <label className='block mb-3'>
-                <span className='block text-sm'>Alamat</span>
-                <textarea 
-                className='border border-slate-200 w-full mt-2 h-28'
-                name='address' 
-                onChange={onChange}
-                value={inputDataEmployee.address}
-                disabled={onView?true:false}
-                />
-            </label>
-            <div className='flex gap-2 my-2'>
-                <p className='text-sm'>Select Gender</p>
+            <div>
+                <form className='mt-3'>
+                <label className='block mb-3'>
+                    <span className='block text-sm'>Nama Pekerja</span>
                     <input 
-                    type='radio' 
-                    value='l'
-                    name='gender' 
+                    className='border border-slate-200 w-full mt-2' 
+                    name='name' 
                     onChange={onChange}
-                    checked={inputDataEmployee.gender === 'l'}
+                    value={inputDataEmployee.name}
+                    disabled={onView?true:false}
+                    required
+                    />
+                </label>
+                <label className='block mb-3'>
+                    <span className='block text-sm'>Alamat</span>
+                    <textarea 
+                    className='border border-slate-200 w-full mt-2 h-28'
+                    name='address' 
+                    onChange={onChange}
+                    value={inputDataEmployee.address}
                     disabled={onView?true:false}
                     />
-                    <label>Male</label>
+                </label>
+                <div className='flex gap-2 my-2'>
+                    <p className='text-sm'>Select Gender</p>
+                        <input 
+                        type='radio' 
+                        value='l'
+                        name='gender' 
+                        onChange={onChange}
+                        checked={inputDataEmployee.gender === 'l'}
+                        disabled={onView?true:false}
+                        />
+                        <label>Male</label>
+                        <input 
+                        type='radio' 
+                        value='p'
+                        name='gender' 
+                        onChange={onChange}
+                        checked={inputDataEmployee.gender === 'p'}
+                        disabled={onView?true:false}
+                        />
+                        <label>Female</label>
+                </div>
+                <label className='block mb-3'>
+                    <span className='block text-sm'>Tanggal Lahir</span>
                     <input 
-                    type='radio' 
-                    value='p'
-                    name='gender' 
+                    className='border border-slate-200 w-25 mt-2' 
+                    type='date'
+                    name='born_date' 
                     onChange={onChange}
-                    checked={inputDataEmployee.gender === 'p'}
+                    value={inputDataEmployee.born_date}
                     disabled={onView?true:false}
                     />
-                    <label>Female</label>
+                </label>
+            </form>
+                <div className='flex justify-end mt-10 gap-3'>
+                    <button className='bg-red-600 text-white px-4 py-1' onClick={onCancel}>Cancel</button>
+                    <button className={`bg-teal-600 text-white px-4 py-1 ${onView && 'hidden'}`} onClick={onSubmit}>Simpan</button>
+                </div>
             </div>
-            <label className='block mb-3'>
-                <span className='block text-sm'>Tanggal Lahir</span>
-                <input 
-                className='border border-slate-200 w-25 mt-2' 
-                type='date'
-                name='born_date' 
-                onChange={onChange}
-                value={inputDataEmployee.born_date}
-                disabled={onView?true:false}
-                />
-            </label>
-            <div className='flex justify-end mt-10 gap-3'>
-                <button className='bg-red-600 text-white px-4 py-1' onClick={onCancel}>Cancel</button>
-                <button className={`bg-teal-600 text-white px-4 py-1 ${onView && 'hidden'}`} onClick={onSubmit}>Simpan</button>
-            </div>
-        </form>
         )
     }
 

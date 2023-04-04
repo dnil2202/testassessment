@@ -4,7 +4,7 @@ import Layout from '../layouts/Layout';
 import Home from '../view/Home';
 
 const Router = () => {
-  let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODA0OTUyOTYsImlhdCI6MTY4MDQwODg5Niwic3ViIjo2Nn0.Ez8DTjJx7yMXvVLpYyz0oW7Gj4lCxkXSZDyPj0F4isY'
+  let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODA1ODM4NTUsImlhdCI6MTY4MDQ5NzQ1NSwic3ViIjo3MX0.M54NjfRT4cUV2nJQEs5_TOjakm5EB27LATbl4UUXhLs'
   localStorage.setItem('employee',token)
   return (
         <Routes>

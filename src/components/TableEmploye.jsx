@@ -148,6 +148,7 @@ return (
                 setIdEdit={setIdEdit}
                 onView={onView}
                 setOnView={setOnView}
+                setFetchStatus={setFetchStatus}
                 />
             }
         </div>
